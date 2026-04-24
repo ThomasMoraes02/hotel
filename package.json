@@ -1,0 +1,22 @@
+{
+  "name": "hotel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "docker:compose:up": "docker compose up -d",
+    "docker:compose:up:build": "docker compose up -d --build",
+    "docker:compose:down": "docker compose down -v",
+    "docker:compose:exec:backend": "docker compose exec backend bash"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jest": "^30.3.0",
+    "nodemon": "^3.1.14",
+    "pg-promise": "^12.6.2",
+    "ts-jest": "^29.4.9",
+    "ts-node": "^10.9.2"
+  }
+}
