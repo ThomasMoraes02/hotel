@@ -9,9 +9,9 @@ export default class Room {
         private status: "available" | "occupied"
     ) {}
     
-    static create(number: number, capacity: number, pricePerNight: number): Room {
+    static create(number: number, capacity: number, pricePerNight: number, status: string): Room {
         const uuid = Uuid.create();
-        return new Room(uuid, number, capacity, pricePerNight, "available");
+        return new Room(uuid, number, capacity, pricePerNight, status as "available" | "occupied");
     }
 
     getUuid(): string {
