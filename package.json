@@ -18,5 +18,8 @@
     "pg-promise": "^12.6.2",
     "ts-jest": "^29.4.9",
     "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0"
   }
 }
