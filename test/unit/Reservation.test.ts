@@ -20,6 +20,7 @@ describe("Reservation Entity", () => {
         expect(reservation.getRoomId()).toBe(roomId.getValue());
         expect(reservation.getGuestId()).toBe(guestId.getValue());
         expect(reservation.getTotalNights()).toBe(4);
+        expect(reservation.getStatus()).toBe("pending");
     });
 
     it("Should throw an error if check-out date is before check-in date", () => {

@@ -22,6 +22,13 @@ export default class CreateReservation {
         if (hasConflict) throw new Error("The room is already booked for the selected period");
         const reservation = Reservation.create(input.roomId, input.guestId, input.checkInDate, input.checkOutDate);
         await this.reservationRepository.save(reservation);
+
+        const events = reservation.getDomainEvents();
+        for (const event of events) {
+            console.log(`Event: ${event.getEventName()} occurred on ${event.occurredOn.toISOString()}`);
+        }
+        reservation.clearDomainEvents();
+
         return { id: reservation.getUuid() };
     }
 }

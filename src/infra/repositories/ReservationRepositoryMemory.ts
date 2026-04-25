@@ -15,6 +15,11 @@ export default class ReservationRepositoryMemory implements ReservationRepositor
         }
     }
 
+    async findByUuid(uuid: string): Promise<Reservation | null> {
+        const reservation = this.reservations.find(reservation => reservation.getUuid() === uuid);
+        return reservation || null;
+    }
+
     async findByGuestId(guestId: string): Promise<Reservation[]> {
         return this.reservations.filter(reservation => reservation.getGuestId() === guestId);
     }
