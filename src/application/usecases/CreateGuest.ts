@@ -6,7 +6,7 @@ export default class CreateGuest {
     constructor(private readonly guestRepository: GuestRepository) { }
     
     async execute(input: Input): Promise<Output> {
-        const guestExists = await this.guestRepository.findByEmail(new Email(input.email));
+        const guestExists = await this.guestRepository.findByEmail(input.email);
         if (guestExists) throw new Error("Guest already exists with this email");
         const guest = Guest.create(input.name, input.email, input.document, input.password);
         await this.guestRepository.save(guest);

@@ -1,8 +1,8 @@
-import Guest from "../entities/Guest";
 import Reservation from "../entities/Reservation";
-import Uuid from "../value-objects/Uuid";
+import ReservationPeriod from "../value-objects/ReservationPeriod";
 
-export default interface GuestRepository {
+export default interface ReservationRepository {
     save(reservation: Reservation): Promise<void>;
-    findByGuestId(guestId: Uuid): Promise<Reservation[]>;
+    findByGuestId(guestId: string): Promise<Reservation[]>;
+    hasConflict(roomId: string, period: ReservationPeriod): Promise<boolean>;
 }

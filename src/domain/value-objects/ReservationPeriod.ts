@@ -8,4 +8,8 @@ export default class ReservationPeriod {
         const totalNights = (this.checkOut.getTime() - this.checkIn.getTime()) / millisecondsPerNight;
         return Math.ceil(totalNights);
     }
+
+    overlapsWith(other: ReservationPeriod): boolean {
+        return this.checkIn < other.checkOut && this.checkOut > other.checkIn;
+    }
 }

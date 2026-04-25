@@ -14,8 +14,7 @@ describe("Reservation Entity", () => {
     it("Should create a reservation with valid data", () => {
         const checkIn = new Date("2026-08-01");
         const checkOut = new Date("2026-08-05");
-        const period = new ReservationPeriod(checkIn, checkOut);
-        const reservation = Reservation.create(roomId, guestId, period);
+        const reservation = Reservation.create(roomId.getValue(), guestId.getValue(), checkIn, checkOut);
         
         expect(reservation.getUuid()).toBeDefined();
         expect(reservation.getRoomId()).toBe(roomId.getValue());
@@ -26,6 +25,6 @@ describe("Reservation Entity", () => {
     it("Should throw an error if check-out date is before check-in date", () => {
         const checkIn = new Date("2026-08-05");
         const checkOut = new Date("2026-08-01");
-        expect(() => Reservation.create(roomId, guestId, new ReservationPeriod(checkIn, checkOut))).toThrow(new Error("Check-out date must be after check-in date."));
+        expect(() => Reservation.create(roomId.getValue(), guestId.getValue(), checkIn, checkOut)).toThrow(new Error("Check-out date must be after check-in date."));
     });
 });
