@@ -1,4 +1,5 @@
 import CreateGuest from "../../../src/application/usecases/CreateGuest";
+import Registry from "../../../src/infra/di/Registry";
 import GuestRepositoryMemory from "../../../src/infra/repositories/GuestRepositoryMemory";
 
 let guestRepository: GuestRepositoryMemory;
@@ -6,7 +7,8 @@ let createGuestUseCase: CreateGuest;
 
 beforeEach(() => {
     guestRepository = new GuestRepositoryMemory();
-    createGuestUseCase = new CreateGuest(guestRepository);
+    Registry.getInstance().provide("GuestRepository", guestRepository);
+    createGuestUseCase = new CreateGuest();
 });
 
 it("Should create a new guest", async () => {

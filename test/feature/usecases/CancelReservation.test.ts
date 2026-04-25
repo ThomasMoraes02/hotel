@@ -5,6 +5,7 @@ import Room from "../../../src/domain/entities/Room";
 import GuestRepository from "../../../src/domain/repositories/GuestRepository";
 import ReservationRepository from "../../../src/domain/repositories/ReservationRepository";
 import RoomRepository from "../../../src/domain/repositories/RoomRepository";
+import Registry from "../../../src/infra/di/Registry";
 import GuestRepositoryMemory from "../../../src/infra/repositories/GuestRepositoryMemory";
 import ReservationRepositoryMemory from "../../../src/infra/repositories/ReservationRepositoryMemory";
 import RoomRepositoryMemory from "../../../src/infra/repositories/RoomRepositoryMemory";
@@ -23,16 +24,15 @@ beforeEach(() => {
     guestRepository = new GuestRepositoryMemory();
     guest = Guest.create("John Doe", "johndoe@gmail.com", "123.456.789-09", "password123");
     guestRepository.save(guest);
-
     room = Room.create(101, 2, 100, "available");
     roomRepository.save(room);
-
     reservation = Reservation.create(room.getUuid(), guest.getUuid(), new Date("2026-07-01"), new Date("2026-07-05"));
     reservationRepository.save(reservation);
+    Registry.getInstance().provide("ReservationRepository", reservationRepository);
+    cancelReservationUseCase = new CancelReservation();
 });
 
 it("Should cancel a reservation", async () => {
-    cancelReservationUseCase = new CancelReservation(reservationRepository);
     const input = {
         reservationId: reservation.getUuid(),
         reason: "Change of plans",
@@ -44,7 +44,6 @@ it("Should cancel a reservation", async () => {
 });
 
 it("Should not cancel a non-existing reservation", async () => {
-    cancelReservationUseCase = new CancelReservation(reservationRepository);
     const input = {
         reservationId: "non-existing-reservation-id",
         reason: "Change of plans",
@@ -54,7 +53,6 @@ it("Should not cancel a non-existing reservation", async () => {
 });
 
 it("Should not cancel an already cancelled reservation", async () => {
-    cancelReservationUseCase = new CancelReservation(reservationRepository);
     const input = {
         reservationId: reservation.getUuid(),
         reason: "Change of plans",

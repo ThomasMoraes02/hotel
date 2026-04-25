@@ -1,9 +1,11 @@
 import Guest from "../../domain/entities/Guest";
 import GuestRepository from "../../domain/repositories/GuestRepository";
 import Email from "../../domain/value-objects/Email";
+import { inject } from "../../infra/di/Registry";
 
 export default class CreateGuest {
-    constructor(private readonly guestRepository: GuestRepository) { }
+    @inject("GuestRepository")
+    private readonly guestRepository!: GuestRepository;
     
     async execute(input: Input): Promise<Output> {
         const guestExists = await this.guestRepository.findByEmail(input.email);

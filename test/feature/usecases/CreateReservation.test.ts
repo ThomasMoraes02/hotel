@@ -4,6 +4,7 @@ import Room from "../../../src/domain/entities/Room";
 import GuestRepository from "../../../src/domain/repositories/GuestRepository";
 import ReservationRepository from "../../../src/domain/repositories/ReservationRepository";
 import RoomRepository from "../../../src/domain/repositories/RoomRepository";
+import Registry from "../../../src/infra/di/Registry";
 import GuestRepositoryMemory from "../../../src/infra/repositories/GuestRepositoryMemory";
 import ReservationRepositoryMemory from "../../../src/infra/repositories/ReservationRepositoryMemory";
 import RoomRepositoryMemory from "../../../src/infra/repositories/RoomRepositoryMemory";
@@ -19,7 +20,10 @@ beforeEach(() => {
     reservationRepository = new ReservationRepositoryMemory();
     roomRepository = new RoomRepositoryMemory();
     guestRepository = new GuestRepositoryMemory();
-    createReservationUseCase = new CreateReservation(reservationRepository, roomRepository, guestRepository);
+    Registry.getInstance().provide("ReservationRepository", reservationRepository);
+    Registry.getInstance().provide("RoomRepository", roomRepository);
+    Registry.getInstance().provide("GuestRepository", guestRepository);
+    createReservationUseCase = new CreateReservation();
 
     guest = Guest.create("John Doe", "johndoe@gmail.com", "123.456.789-09", "password123");
     guestRepository.save(guest);

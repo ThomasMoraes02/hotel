@@ -3,13 +3,15 @@ import GuestRepository from "../../domain/repositories/GuestRepository";
 import ReservationRepository from "../../domain/repositories/ReservationRepository";
 import RoomRepository from "../../domain/repositories/RoomRepository";
 import ReservationPeriod from "../../domain/value-objects/ReservationPeriod";
+import { inject } from "../../infra/di/Registry";
 
 export default class CreateReservation {
-    constructor(
-        private readonly reservationRepository: ReservationRepository,
-        private readonly roomRepository: RoomRepository,
-        private readonly guestRepository: GuestRepository
-    ) { }
+    @inject("ReservationRepository")
+    private reservationRepository!: ReservationRepository;
+    @inject("RoomRepository")
+    private roomRepository!: RoomRepository;
+    @inject("GuestRepository")
+    private guestRepository!: GuestRepository;
     
     async execute(input: Input): Promise<Output> {
         const guest = await this.guestRepository.findByUuid(input.guestId);

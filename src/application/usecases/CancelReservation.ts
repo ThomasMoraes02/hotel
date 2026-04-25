@@ -1,7 +1,9 @@
 import ReservationRepository from "../../domain/repositories/ReservationRepository";
+import { inject } from "../../infra/di/Registry";
 
 export default class CancelReservation {
-    constructor(private readonly reservationRepository: ReservationRepository) { }
+    @inject("ReservationRepository")
+    private readonly reservationRepository!: ReservationRepository;
     
     async execute(input: Input): Promise<void> {
         const reservation = await this.reservationRepository.findByUuid(input.reservationId);

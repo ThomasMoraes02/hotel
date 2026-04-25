@@ -1,8 +1,10 @@
 import Room from "../../domain/entities/Room";
 import RoomRepository from "../../domain/repositories/RoomRepository";
+import { inject } from "../../infra/di/Registry";
 
 export default class CreateRoom {
-constructor(private readonly roomRepository: RoomRepository) { }
+    @inject("RoomRepository")
+    private readonly roomRepository!: RoomRepository;
     
     async execute(input: Input): Promise<Output> {
         const roomExists = await this.roomRepository.findByNumber(input.number);

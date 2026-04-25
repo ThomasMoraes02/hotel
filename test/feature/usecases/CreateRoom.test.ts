@@ -1,5 +1,6 @@
 import CreateRoom from "../../../src/application/usecases/CreateRoom";
 import RoomRepository from "../../../src/domain/repositories/RoomRepository";
+import Registry from "../../../src/infra/di/Registry";
 import RoomRepositoryMemory from "../../../src/infra/repositories/RoomRepositoryMemory";
 
 let roomRepository: RoomRepository;
@@ -7,7 +8,8 @@ let createRoomUseCase: CreateRoom;
 
 beforeEach(() => {
     roomRepository = new RoomRepositoryMemory();
-    createRoomUseCase = new CreateRoom(roomRepository);
+    createRoomUseCase = new CreateRoom();
+    Registry.getInstance().provide("RoomRepository", roomRepository);
 });
 
 it("Should create a new room", async () => {
