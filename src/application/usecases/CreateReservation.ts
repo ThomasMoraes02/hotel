@@ -1,4 +1,5 @@
 import Reservation from "../../domain/entities/Reservation";
+import EventBus from "../../domain/events/EventBus";
 import GuestRepository from "../../domain/repositories/GuestRepository";
 import ReservationRepository from "../../domain/repositories/ReservationRepository";
 import RoomRepository from "../../domain/repositories/RoomRepository";
@@ -12,6 +13,8 @@ export default class CreateReservation {
     private roomRepository!: RoomRepository;
     @inject("GuestRepository")
     private guestRepository!: GuestRepository;
+    @inject("EventBus")
+    private eventBus!: EventBus;
     
     async execute(input: Input): Promise<Output> {
         const guest = await this.guestRepository.findByUuid(input.guestId);
@@ -27,7 +30,7 @@ export default class CreateReservation {
 
         const events = reservation.getDomainEvents();
         for (const event of events) {
-            console.log(`Event: ${event.getEventName()} occurred on ${event.occurredOn.toISOString()}`);
+            await this.eventBus.publish(event);
         }
         reservation.clearDomainEvents();
 

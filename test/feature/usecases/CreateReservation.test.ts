@@ -1,10 +1,13 @@
+import SendEmailOnReservationCreated from "../../../src/application/handlers/SendEmailOnReservationCreated";
 import CreateReservation from "../../../src/application/usecases/CreateReservation";
 import Guest from "../../../src/domain/entities/Guest";
 import Room from "../../../src/domain/entities/Room";
+import EventBus from "../../../src/domain/events/EventBus";
 import GuestRepository from "../../../src/domain/repositories/GuestRepository";
 import ReservationRepository from "../../../src/domain/repositories/ReservationRepository";
 import RoomRepository from "../../../src/domain/repositories/RoomRepository";
 import Registry from "../../../src/infra/di/Registry";
+import InMemoryEventBus from "../../../src/infra/events/InMemoryEventBus";
 import GuestRepositoryMemory from "../../../src/infra/repositories/GuestRepositoryMemory";
 import ReservationRepositoryMemory from "../../../src/infra/repositories/ReservationRepositoryMemory";
 import RoomRepositoryMemory from "../../../src/infra/repositories/RoomRepositoryMemory";
@@ -15,6 +18,7 @@ let guestRepository: GuestRepository;
 let createReservationUseCase: CreateReservation;    
 let guest: Guest;
 let room: Room;
+let eventBus: EventBus;
 
 beforeEach(() => {
     reservationRepository = new ReservationRepositoryMemory();
@@ -30,6 +34,11 @@ beforeEach(() => {
 
     room = Room.create(101, 2, 100, "available");
     roomRepository.save(room);
+
+    eventBus = new InMemoryEventBus();
+    eventBus.subscribe("ReservationCreated", new SendEmailOnReservationCreated());
+
+    Registry.getInstance().provide("EventBus", eventBus);
 });
 
 it("Should create a reservation", async () => {
