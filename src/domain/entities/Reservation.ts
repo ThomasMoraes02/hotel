@@ -59,7 +59,7 @@ export default class Reservation {
     }
 
     public getDomainEvents(): DomainEvent[] {
-        return this.domainEvents;
+        return [...this.domainEvents];
     }
 
     public clearDomainEvents(): void {
