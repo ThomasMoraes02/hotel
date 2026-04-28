@@ -42,6 +42,11 @@ Content-Type: application/json
   "status": "available"
 }
 
+@roomId = {{createRoom.response.body.id}}
+
+### Get Room by ID
+GET {{baseUrl}}/rooms/{{roomId}}
+
 ################################################################################
 # RESERVATIONS
 ################################################################################
