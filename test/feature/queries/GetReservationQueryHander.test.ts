@@ -24,8 +24,8 @@ beforeEach(async () => {
     const RoomRepository = new RoomRepositoryDatabase();
     const ReservationRepository = new ReservationRepositoryDatabase();
 
-    guest = Guest.create("John Doe", `john${Math.random()}@gmail.com`, "123.456.789-09", "password123");
-    room = Room.create(101, 2, 150.00, "available");
+    guest = Guest.create("John Doe", `john${Math.random()}@gmail.com`, "529.682.010-00", "password123");
+    room = Room.create(1002, 2, 150.00, "available");
     reservation = Reservation.create(room.getUuid(), guest.getUuid(), new Date("2024-05-01"), new Date("2024-05-05"));
 
     await GuestRepository.save(guest);

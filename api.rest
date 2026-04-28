@@ -15,7 +15,7 @@ Content-Type: application/json
 {
   "name": "John Doe",
   "email": "john@example.com",
-  "document": "123.456.789-09",
+  "document": "317.639.190-05",
   "password": "password123"
 }
 
@@ -36,7 +36,7 @@ POST {{baseUrl}}/rooms
 Content-Type: application/json
 
 {
-  "number": 102,
+  "number": 1052,
   "capacity": 6,
   "pricePerNight": 350.00,
   "status": "available"
