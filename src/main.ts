@@ -13,6 +13,8 @@ import RoomRepositoryDatabase from './infra/repositories/RoomRepositoryDatabase'
 import ReservationRepositoryDatabase from './infra/repositories/ReservationRepositoryDatabase';
 import PgPromiseAdapter from './infra/database/PgPromiseAdapter';
 import InMemoryEventBus from './infra/events/InMemoryEventBus';
+import CancelReservation from './application/usecases/CancelReservation';
+import GetGuest from './application/usecases/GetGuest';
 
 async function main() {
     const httpServer = new FastifyAdapter();
@@ -25,9 +27,12 @@ async function main() {
     Registry.getInstance().provide("RoomRepository", new RoomRepositoryDatabase());
     Registry.getInstance().provide("ReservationRepository", new ReservationRepositoryDatabase());
 
+    Registry.getInstance().provide("GetGuest", new GetGuest());
     Registry.getInstance().provide("CreateGuest", new CreateGuest());
     Registry.getInstance().provide("CreateRoom", new CreateRoom());
     Registry.getInstance().provide("CreateReservation", new CreateReservation());
+    Registry.getInstance().provide("CancelReservation", new CancelReservation());
+
     new GuestController();
     new RoomController();
     new ReservationController();
