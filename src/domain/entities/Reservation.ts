@@ -33,6 +33,14 @@ export default class Reservation {
         return reservation;
     }
 
+    static restore(id: string, roomId: string, guestId: string, checkIn: Date, checkOut: Date, status: string): Reservation {
+        const uuid = new Uuid(id);
+        const period = new ReservationPeriod(checkIn, checkOut);
+        const roomUuid = new Uuid(roomId);
+        const guestUuid = new Uuid(guestId);
+        return new Reservation(uuid, roomUuid, guestUuid, period, status as "pending" | "confirmed" | "cancelled");
+    }
+
     cancel(reason: string, cancelledBy: "guest" | "admin" | "system"): void {
         if(this.status === "cancelled") throw new Error("Reservation is already cancelled");
         this.status = "cancelled";

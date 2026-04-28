@@ -14,6 +14,23 @@ export default class Room {
         return new Room(uuid, number, capacity, pricePerNight, status as "available" | "occupied");
     }
 
+    static restore(id: string, number: number, capacity: number, pricePerNight: number, status: string): Room {
+        const uuid = new Uuid(id);
+        return new Room(uuid, number, capacity, pricePerNight, status as "available" | "occupied");
+    }
+
+    getNumber(): number {
+        return this.number;
+    }
+
+    getCapacity(): number {
+        return this.capacity;
+    }
+
+    getPricePerNight(): number {
+        return this.pricePerNight;
+    }
+
     getUuid(): string {
         return this.uuid.getValue();
     }

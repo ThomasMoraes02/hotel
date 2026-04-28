@@ -14,6 +14,18 @@ export default class Guest {
         return new Guest(uuid, name, emailVO, cpf, pwd);
     }
 
+    static restore(id: string, name: string, email: string, document: string, password: string): Guest {
+        const uuid = new Uuid(id);
+        const emailVO = new Email(email);
+        const cpf = new Cpf(document);
+        const pwd = new Password(password);
+        return new Guest(uuid, name, emailVO, cpf, pwd);
+    }
+
+    getName(): string {
+        return this.name;
+    }
+
     getUuid(): string {
         return this.uuid.getValue();
     }

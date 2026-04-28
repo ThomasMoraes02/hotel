@@ -1,0 +1,61 @@
+@baseUrl = http://localhost:3000
+
+### Health Check
+GET {{baseUrl}}/health
+
+################################################################################
+# GUESTS
+################################################################################
+
+### Create Guest
+# @name createGuest
+POST {{baseUrl}}/guests
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "document": "123.456.789-09",
+  "password": "password123"
+}
+
+################################################################################
+# ROOMS
+################################################################################
+
+### Create Room
+# @name createRoom
+POST {{baseUrl}}/rooms
+Content-Type: application/json
+
+{
+  "number": 101,
+  "capacity": 2,
+  "pricePerNight": 150.00,
+  "status": "available"
+}
+
+################################################################################
+# RESERVATIONS
+################################################################################
+
+### Create Reservation (uses IDs from above)
+# @name createReservation
+POST {{baseUrl}}/reservations
+Content-Type: application/json
+
+{
+  "guestId": "{{createGuest.response.body.id}}",
+  "roomId": "{{createRoom.response.body.id}}",
+  "checkInDate": "2026-08-02",
+  "checkOutDate": "2026-08-10"
+}
+
+### Cancel Reservation (uses ID from above)
+DELETE {{baseUrl}}/reservations/{{createReservation.response.body.id}}
+Content-Type: application/json
+
+{
+  "reason": "Change of plans",
+  "cancelledBy": "guest"
+}
