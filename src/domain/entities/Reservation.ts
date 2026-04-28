@@ -85,4 +85,8 @@ export default class Reservation {
     getTotalNights(): number {
         return this.period.getTotalNights();
     }
+
+    getTotalPrice(pricePerNight: number): number {
+        return this.getTotalNights() * pricePerNight;
+    }
 }

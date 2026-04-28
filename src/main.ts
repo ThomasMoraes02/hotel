@@ -16,6 +16,8 @@ import InMemoryEventBus from './infra/events/InMemoryEventBus';
 import CancelReservation from './application/usecases/CancelReservation';
 import GetGuest from './application/usecases/GetGuest';
 import GetRoom from './application/usecases/GetRoom';
+import GetReservationQueryHandler from './application/queries/GetReservationQueryHandler';
+import ReservationQueryRepositoryDatabase from './infra/repositories/queries/ReservationQueryRepositoryDatabase';
 
 async function main() {
     const httpServer = new FastifyAdapter();
@@ -27,13 +29,15 @@ async function main() {
     Registry.getInstance().provide("GuestRepository", new GuestRepositoryDatabase());
     Registry.getInstance().provide("RoomRepository", new RoomRepositoryDatabase());
     Registry.getInstance().provide("ReservationRepository", new ReservationRepositoryDatabase());
+    Registry.getInstance().provide("ReservationQueryRepository", new ReservationQueryRepositoryDatabase());
 
-    Registry.getInstance().provide("GetGuest", new GetGuest());
-    Registry.getInstance().provide("GetRoom", new GetRoom());
     Registry.getInstance().provide("CreateGuest", new CreateGuest());
+    Registry.getInstance().provide("GetGuest", new GetGuest());
     Registry.getInstance().provide("CreateRoom", new CreateRoom());
+    Registry.getInstance().provide("GetRoom", new GetRoom());
     Registry.getInstance().provide("CreateReservation", new CreateReservation());
     Registry.getInstance().provide("CancelReservation", new CancelReservation());
+    Registry.getInstance().provide("GetReservationQueryHandler", new GetReservationQueryHandler());
 
     new GuestController();
     new RoomController();

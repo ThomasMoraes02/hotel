@@ -14,8 +14,8 @@ Content-Type: application/json
 
 {
   "name": "John Doe",
-  "email": "john123@example.com",
-  "document": "47423647837",
+  "email": "john@example.com",
+  "document": "123.456.789-09",
   "password": "password123"
 }
 
@@ -42,6 +42,8 @@ Content-Type: application/json
   "status": "available"
 }
 
+###
+
 @roomId = {{createRoom.response.body.id}}
 
 ### Get Room by ID
@@ -57,17 +59,27 @@ POST {{baseUrl}}/reservations
 Content-Type: application/json
 
 {
-  "guestId": "{{createGuest.response.body.id}}",
-  "roomId": "{{createRoom.response.body.id}}",
+  "guestId": "{{guestId}}",
+  "roomId": "{{roomId}}",
   "checkInDate": "2026-08-02",
   "checkOutDate": "2026-08-10"
 }
 
+###
+
+@reservationId = {{createReservation.response.body.id}}
+
 ### Cancel Reservation (uses ID from above)
-PUT {{baseUrl}}/reservations/{{createReservation.response.body.id}}/cancel
+PUT {{baseUrl}}/reservations/{{reservationId}}/cancel
 Content-Type: application/json
 
 {
   "reason": "Change of plans",
   "cancelledBy": "guest"
 }
+
+### Get Reservation by ID
+GET {{baseUrl}}/reservations/{{reservationId}}
+Content-Type: application/json
+
+###
