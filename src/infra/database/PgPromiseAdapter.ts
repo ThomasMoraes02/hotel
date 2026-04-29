@@ -13,6 +13,15 @@ export default class PgPromiseAdapter implements DatabaseConnection {
         return this.connection.query(statement, params);
     }
 
+    async ping(): Promise<boolean> {
+        try {
+            await this.connection.query('SELECT 1');
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
     close(): Promise<void> {
         return this.connection.$pool.end();
     }

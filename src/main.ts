@@ -21,13 +21,15 @@ import ReservationQueryRepositoryDatabase from './infra/repositories/queries/Res
 import ExpressAdapter from './infra/http/server/ExpressAdapter';
 import FetchAdapter from './infra/http/client/FetchAdapter';
 import SendEmailOnReservationCreated from './application/handlers/SendEmailOnReservationCreated';
+import ConsoleLogger from './infra/logging/ConsoleLogger';
+import HealthCheck from './application/usecases/health/HealthCheck';
+import HealthController from './infra/http/controllers/HealthController';
 
 async function main() {
     const httpServer = new FastifyAdapter();
-    // const httpServer = new ExpressAdapter();
     const httpClient = new AxiosAdapter();
-    // const httpClient = new FetchAdapter();
     const eventBus = new InMemoryEventBus();
+    const logger = new ConsoleLogger();
 
     eventBus.subscribe("ReservationCreated", new SendEmailOnReservationCreated());
 
@@ -35,6 +37,7 @@ async function main() {
     Registry.getInstance().provide("HttpClient", httpClient);
     Registry.getInstance().provide("DatabaseConnection", new PgPromiseAdapter(process.env.DATABASE_URL!));
     Registry.getInstance().provide("EventBus", eventBus);
+    Registry.getInstance().provide("Logger", logger);
 
     Registry.getInstance().provide("GuestRepository", new GuestRepositoryDatabase());
     Registry.getInstance().provide("RoomRepository", new RoomRepositoryDatabase());
@@ -48,10 +51,12 @@ async function main() {
     Registry.getInstance().provide("CreateReservation", new CreateReservation());
     Registry.getInstance().provide("CancelReservation", new CancelReservation());
     Registry.getInstance().provide("GetReservationQueryHandler", new GetReservationQueryHandler());
+    Registry.getInstance().provide("HealthCheck", new HealthCheck());
 
     new GuestController();
     new RoomController();
     new ReservationController();
+    new HealthController();
     const port = Number(process.env.SERVER_PORT!);
     httpServer.listen(port);
 }
