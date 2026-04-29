@@ -20,8 +20,8 @@ beforeEach(() => {
 it("Should create a reservation", async () => {
     const responseCreateGuest = await httpClient.post(`${url}/guests`, {
         "name": `John Doe ${Math.random()}`,
-        "email": `john${Math.random()}@example.com`,
-        "document": "063.066.760-82",
+        "email": `john${Math.random()}@examples.com`,
+        "document": "866.354.540-12",
         "password": "password123"
     });
     guestId = responseCreateGuest.id;

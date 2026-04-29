@@ -19,13 +19,16 @@ import GetRoom from './application/usecases/GetRoom';
 import GetReservationQueryHandler from './application/queries/GetReservationQueryHandler';
 import ReservationQueryRepositoryDatabase from './infra/repositories/queries/ReservationQueryRepositoryDatabase';
 import ExpressAdapter from './infra/http/server/ExpressAdapter';
+import FetchAdapter from './infra/http/client/FetchAdapter';
 
 async function main() {
     const httpServer = new FastifyAdapter();
     // const httpServer = new ExpressAdapter();
+    const httpClient = new AxiosAdapter();
+    // const httpClient = new FetchAdapter();
 
     Registry.getInstance().provide("HttpServer", httpServer);
-    Registry.getInstance().provide("HttpClient", new AxiosAdapter());
+    Registry.getInstance().provide("HttpClient", httpClient);
     Registry.getInstance().provide("DatabaseConnection", new PgPromiseAdapter(process.env.DATABASE_URL || ""));
     Registry.getInstance().provide("EventBus", new InMemoryEventBus());
 
