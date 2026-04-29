@@ -21,7 +21,7 @@ it("Should create a reservation", async () => {
     const responseCreateGuest = await httpClient.post(`${url}/guests`, {
         "name": `John Doe ${Math.random()}`,
         "email": `john${Math.random()}@example.com`,
-        "document": "222.570.890-81",
+        "document": "063.066.760-82",
         "password": "password123"
     });
     guestId = responseCreateGuest.id;

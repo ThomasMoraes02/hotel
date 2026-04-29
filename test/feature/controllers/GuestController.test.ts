@@ -19,7 +19,7 @@ it("Should create a guest", async () => {
     const body = {
         "name": `John Doe ${Math.random()}`,
         "email": `john${Math.random()}@example.com`,
-        "document": "222.570.890-81",
+        "document": "810.028.210-29",
         "password": "password123"
     }
 

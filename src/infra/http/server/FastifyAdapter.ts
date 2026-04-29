@@ -29,7 +29,7 @@ export default class FastifyAdapter implements HttpServer {
                 origin: true
             });
             this.app.listen({ port, host: '0.0.0.0' });
-            console.log(`Server listening on http://localhost:${port}`);
+            console.log(`Fastify: Server listening on http://localhost:${port}`);
         } catch (e: any) {
             this.app.log.error(e);
             process.exit(1);

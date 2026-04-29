@@ -18,9 +18,12 @@ import GetGuest from './application/usecases/GetGuest';
 import GetRoom from './application/usecases/GetRoom';
 import GetReservationQueryHandler from './application/queries/GetReservationQueryHandler';
 import ReservationQueryRepositoryDatabase from './infra/repositories/queries/ReservationQueryRepositoryDatabase';
+import ExpressAdapter from './infra/http/server/ExpressAdapter';
 
 async function main() {
     const httpServer = new FastifyAdapter();
+    // const httpServer = new ExpressAdapter();
+
     Registry.getInstance().provide("HttpServer", httpServer);
     Registry.getInstance().provide("HttpClient", new AxiosAdapter());
     Registry.getInstance().provide("DatabaseConnection", new PgPromiseAdapter(process.env.DATABASE_URL || ""));
@@ -43,7 +46,7 @@ async function main() {
     new RoomController();
     new ReservationController();
     const port = Number(process.env.SERVER_PORT || 3000);
-    await httpServer.listen(port);
+    httpServer.listen(port);
 }
 
 main();
