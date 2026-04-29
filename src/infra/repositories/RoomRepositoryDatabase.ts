@@ -62,4 +62,16 @@ export default class RoomRepositoryDatabase implements RoomRepository {
             row.status
         );
     }
+
+    async list(): Promise<Room[] | null> {
+        const result = await this.connection.query(`SELECT room_id, number, capacity, price_per_night, status FROM hotel.rooms`);
+        if (result.length === 0) return null;
+        return result.map((row: any) => Room.restore(
+            row.room_id,
+            row.number,
+            row.capacity,
+            parseFloat(row.price_per_night),
+            row.status
+        ));
+    }
 }

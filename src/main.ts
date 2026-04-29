@@ -20,17 +20,21 @@ import GetReservationQueryHandler from './application/queries/GetReservationQuer
 import ReservationQueryRepositoryDatabase from './infra/repositories/queries/ReservationQueryRepositoryDatabase';
 import ExpressAdapter from './infra/http/server/ExpressAdapter';
 import FetchAdapter from './infra/http/client/FetchAdapter';
+import SendEmailOnReservationCreated from './application/handlers/SendEmailOnReservationCreated';
 
 async function main() {
     const httpServer = new FastifyAdapter();
     // const httpServer = new ExpressAdapter();
     const httpClient = new AxiosAdapter();
     // const httpClient = new FetchAdapter();
+    const eventBus = new InMemoryEventBus();
+
+    eventBus.subscribe("ReservationCreated", new SendEmailOnReservationCreated());
 
     Registry.getInstance().provide("HttpServer", httpServer);
     Registry.getInstance().provide("HttpClient", httpClient);
-    Registry.getInstance().provide("DatabaseConnection", new PgPromiseAdapter(process.env.DATABASE_URL || ""));
-    Registry.getInstance().provide("EventBus", new InMemoryEventBus());
+    Registry.getInstance().provide("DatabaseConnection", new PgPromiseAdapter(process.env.DATABASE_URL!));
+    Registry.getInstance().provide("EventBus", eventBus);
 
     Registry.getInstance().provide("GuestRepository", new GuestRepositoryDatabase());
     Registry.getInstance().provide("RoomRepository", new RoomRepositoryDatabase());
@@ -48,7 +52,7 @@ async function main() {
     new GuestController();
     new RoomController();
     new ReservationController();
-    const port = Number(process.env.SERVER_PORT || 3000);
+    const port = Number(process.env.SERVER_PORT!);
     httpServer.listen(port);
 }
 

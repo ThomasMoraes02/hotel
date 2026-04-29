@@ -4,4 +4,5 @@ export default interface RoomRepository {
     save(room: Room): Promise<void>;
     findByUuid(uuid: string): Promise<Room | null>;
     findByNumber(number: number): Promise<Room | null>;
+    list(): Promise<Room[] | null>;
 }

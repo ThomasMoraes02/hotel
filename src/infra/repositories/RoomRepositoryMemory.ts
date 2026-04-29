@@ -22,4 +22,9 @@ export default class RoomRepositoryMemory implements RoomRepository {
         const room = this.rooms.find(r => r.number === number);
         return room || null;
     }
+
+    async list(): Promise<Room[] | null> {
+        if (this.rooms.length === 0) return null;
+        return this.rooms;
+    }
 }
