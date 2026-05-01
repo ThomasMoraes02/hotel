@@ -137,6 +137,12 @@ Para novas funcionalidades, prefira registrar dependencias no `main.ts` apenas q
 - Preserve o estilo atual de classes, metodos `execute(input)`, DTOs `Input`/`Output` locais e injecao via decorator `@inject`.
 - O TypeScript esta em modo `strict`; evite relaxar tipos globais para contornar erros.
 
+## Skills locais
+
+Skills do projeto ficam em `.codex/skills`. Use-as como playbooks para tarefas recorrentes.
+
+- `.codex/skills/criar-endpoint/SKILL.md`: use ao criar, alterar ou revisar endpoints HTTP.
+
 ## Rotas HTTP atuais
 
 As chamadas de exemplo ficam em `api.rest`.
@@ -145,6 +151,7 @@ As chamadas de exemplo ficam em `api.rest`.
 - `POST /guests`
 - `GET /guests/:id`
 - `POST /rooms`
+- `GET /rooms`
 - `GET /rooms/:id`
 - `POST /reservations`
 - `PUT /reservations/:id/cancel`

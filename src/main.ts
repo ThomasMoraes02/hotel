@@ -16,6 +16,7 @@ import InMemoryEventBus from './infra/events/InMemoryEventBus';
 import CancelReservation from './application/usecases/CancelReservation';
 import GetGuest from './application/usecases/GetGuest';
 import GetRoom from './application/usecases/GetRoom';
+import ListRooms from './application/usecases/ListRooms';
 import GetReservationQueryHandler from './application/queries/GetReservationQueryHandler';
 import ReservationQueryRepositoryDatabase from './infra/repositories/queries/ReservationQueryRepositoryDatabase';
 import SendEmailOnReservationCreated from './application/handlers/SendEmailOnReservationCreated';
@@ -46,6 +47,7 @@ async function main() {
     Registry.getInstance().provide("GetGuest", new GetGuest());
     Registry.getInstance().provide("CreateRoom", new CreateRoom());
     Registry.getInstance().provide("GetRoom", new GetRoom());
+    Registry.getInstance().provide("ListRooms", new ListRooms());
     Registry.getInstance().provide("CreateReservation", new CreateReservation());
     Registry.getInstance().provide("CancelReservation", new CancelReservation());
     Registry.getInstance().provide("GetReservationQueryHandler", new GetReservationQueryHandler());

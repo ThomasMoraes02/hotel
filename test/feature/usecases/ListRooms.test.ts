@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import Registry from "../../../src/infra/di/Registry";
 import ListRooms from '../../../src/application/usecases/ListRooms';
-import DatabaseConnection from '../../../src/infra/database/DatabaseConnection';
 import RoomRepositoryMemory from '../../../src/infra/repositories/RoomRepositoryMemory';
 import RoomRepository from '../../../src/domain/repositories/RoomRepository';
 import Room from '../../../src/domain/entities/Room';
@@ -35,4 +34,25 @@ it("Should list all rooms", async () => {
             status: expect.any(String)
         })
     ]));
+});
+
+it("Should list rooms filtered by status", async () => {
+    const availableRoom = Room.create(102, 2, 150, "available");
+    const occupiedRoom = Room.create(103, 4, 250, "occupied");
+
+    await roomRepository.save(availableRoom);
+    await roomRepository.save(occupiedRoom);
+
+    const output = await listRooms.execute({ status: "available" });
+
+    expect(output.rooms).toHaveLength(1);
+    expect(output.rooms).toEqual([
+        {
+            id: availableRoom.getUuid(),
+            number: availableRoom.getNumber(),
+            capacity: availableRoom.getCapacity(),
+            pricePerNight: availableRoom.getPricePerNight(),
+            status: "available"
+        }
+    ]);
 });

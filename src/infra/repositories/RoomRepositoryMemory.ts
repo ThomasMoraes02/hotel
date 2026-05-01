@@ -23,8 +23,11 @@ export default class RoomRepositoryMemory implements RoomRepository {
         return room || null;
     }
 
-    async list(): Promise<Room[] | null> {
-        if (this.rooms.length === 0) return null;
-        return this.rooms;
+    async list(filter?: { status?: string }): Promise<Room[] | null> {
+        const rooms = filter?.status
+            ? this.rooms.filter(room => room.getStatus() === filter.status)
+            : this.rooms;
+        if (rooms.length === 0) return null;
+        return rooms;
     }
 }

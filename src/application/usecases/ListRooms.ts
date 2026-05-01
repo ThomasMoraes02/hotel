@@ -6,8 +6,8 @@ export default class ListRooms {
     @inject("RoomRepository")
     private roomRepository!: RoomRepository;
 
-    async execute(): Promise<Output> {
-        const rooms = await this.roomRepository.list();
+    async execute(input: Input = {}): Promise<Output> {
+        const rooms = await this.roomRepository.list(input.status ? { status: input.status } : undefined);
         if (!rooms) throw new Error("No rooms found");
         return {
             rooms: rooms.map((room: Room) => ({
@@ -19,6 +19,10 @@ export default class ListRooms {
             }))
         }
     }
+}
+
+type Input = {
+    status?: string;
 }
 
 type Output = {
