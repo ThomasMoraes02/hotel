@@ -34,6 +34,7 @@ npm run docker:compose:up
 npm run docker:compose:up:build
 npm run docker:compose:down
 npm run docker:compose:exec:backend
+npm run docker:db:reset
 ```
 
 Depois que os containers estiverem de pe, rode validacoes pelo host usando os wrappers Docker:
@@ -78,6 +79,7 @@ Scripts wrapper para rodar do host dentro do container:
 - `npm run docker:typecheck`
 - `npm run docker:build`
 - `npm run docker:start`
+- `npm run docker:db:reset`
 
 Se adicionar ou alterar scripts de `dev`, `test`, `build`, `start`, `typecheck` ou wrappers Docker, mantenha esta documentacao atualizada.
 
@@ -88,6 +90,7 @@ Use `.env.example` como base para `.env`.
 O `docker-compose.yml` espera:
 
 - `SERVER_PORT`
+- `AUTH_SECRET`
 - `DATABASE_HOST`
 - `DATABASE_USER`
 - `DATABASE_PASSWORD`
@@ -148,7 +151,9 @@ Skills do projeto ficam em `.codex/skills`. Use-as como playbooks para tarefas r
 As chamadas de exemplo ficam em `api.rest`.
 
 - `GET /health`
-- `POST /guests`
+- `POST /auth/signup`
+- `POST /auth/signin`
+- `POST /auth/logout`
 - `GET /guests/:id`
 - `POST /rooms`
 - `GET /rooms`
@@ -158,6 +163,8 @@ As chamadas de exemplo ficam em `api.rest`.
 - `GET /reservations/:id`
 
 Ao adicionar rotas, siga o padrao dos controllers em `src/infra/http/controllers`: injete o `HttpServer` e o caso de uso necessario, registre a rota no construtor e delegue a regra de negocio para a application layer.
+
+Rotas de hospede e reserva exigem `Authorization: Bearer <token>`. Use `POST /auth/signup` para cadastrar um hospede e `POST /auth/signin` para gerar token de sessao. Reservas devem ser criadas e alteradas apenas para o hospede autenticado.
 
 ## Testes
 

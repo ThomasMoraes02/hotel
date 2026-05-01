@@ -4,12 +4,12 @@
 GET {{baseUrl}}/health
 
 ################################################################################
-# GUESTS
+# AUTH
 ################################################################################
 
-### Create Guest
-# @name createGuest
-POST {{baseUrl}}/guests
+### Sign Up
+# @name signUp
+POST {{baseUrl}}/auth/signup
 Content-Type: application/json
 
 {
@@ -21,10 +21,34 @@ Content-Type: application/json
 
 ### 
 
-@guestId = {{createGuest.response.body.id}}
+@token = {{signUp.response.body.token}}
+@guestId = {{signUp.response.body.guest.id}}
+
+### Sign In
+# @name signIn
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+###
+
+@token = {{signIn.response.body.token}}
+
+### Logout
+POST {{baseUrl}}/auth/logout
+Authorization: Bearer {{token}}
+
+################################################################################
+# GUESTS
+################################################################################
 
 ### Get Guest by ID
 GET {{baseUrl}}/guests/{{guestId}}
+Authorization: Bearer {{token}}
 
 ################################################################################
 # ROOMS
@@ -67,9 +91,9 @@ GET {{baseUrl}}/rooms/{{roomId}}
 # @name createReservation
 POST {{baseUrl}}/reservations
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
-  "guestId": "{{guestId}}",
   "roomId": "{{roomId}}",
   "checkInDate": "2026-08-02",
   "checkOutDate": "2026-08-10"
@@ -82,6 +106,7 @@ Content-Type: application/json
 ### Cancel Reservation (uses ID from above)
 PUT {{baseUrl}}/reservations/{{reservationId}}/cancel
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "reason": "Change of plans",
@@ -91,5 +116,6 @@ Content-Type: application/json
 ### Get Reservation by ID
 GET {{baseUrl}}/reservations/{{reservationId}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 ###

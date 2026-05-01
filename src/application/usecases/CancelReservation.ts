@@ -8,6 +8,7 @@ export default class CancelReservation {
     async execute(input: Input): Promise<void> {
         const reservation = await this.reservationRepository.findByUuid(input.reservationId);
         if (!reservation) throw new Error("Reservation not found");
+        if (input.guestId && reservation.getGuestId() !== input.guestId) throw new Error("Forbidden");
         reservation.cancel(input.reason, input.cancelledBy);
         await this.reservationRepository.save(reservation);
 
@@ -22,5 +23,6 @@ export default class CancelReservation {
 type Input = {
     reservationId: string,
     reason: string,
-    cancelledBy: "guest" | "admin" | "system"
+    cancelledBy: "guest" | "admin" | "system",
+    guestId?: string
 };

@@ -20,4 +20,16 @@ export default class FetchAdapter implements HttpClient {
         });
         return await response.json();
     }
+
+    async put(url: string, data: any, options?: any): Promise<any> {
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options?.headers || {})
+            },
+            body: JSON.stringify(data)
+        });
+        return await response.json();
+    }
 }

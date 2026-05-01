@@ -31,6 +31,7 @@ Use estes valores para o ambiente Docker:
 
 ```env
 SERVER_PORT=3000
+AUTH_SECRET=change-me
 
 DATABASE_HOST=database
 DATABASE_USER=user
@@ -114,6 +115,14 @@ Derrubar containers e remover o volume do banco:
 npm run docker:compose:down
 ```
 
+Resetar o banco, recriando o volume PostgreSQL e subindo os containers novamente:
+
+```bash
+npm run docker:db:reset
+```
+
+Esse comando apaga todos os dados locais do banco.
+
 ## Fluxo recomendado de desenvolvimento
 
 1. Configure o `.env`.
@@ -139,8 +148,15 @@ GET /health
 Hospedes:
 
 ```http
-POST /guests
 GET /guests/:id
+```
+
+Autenticacao:
+
+```http
+POST /auth/signup
+POST /auth/signin
+POST /auth/logout
 ```
 
 Quartos:
@@ -162,6 +178,18 @@ GET /reservations/:id
 
 Exemplos completos de chamadas estao em `api.rest`.
 
+## Autenticacao
+
+Use `POST /auth/signup` para cadastrar um hospede e receber um token. Use `POST /auth/signin` para entrar novamente.
+
+Rotas de hospede e reserva exigem header Bearer:
+
+```http
+Authorization: Bearer <token>
+```
+
+Ao criar uma reserva, o `guestId` vem do token autenticado. A API nao permite criar ou cancelar reservas em nome de outro hospede.
+
 ## Estrutura do projeto
 
 ```txt
@@ -182,5 +210,6 @@ docker/
 - O backend no `docker-compose.yml` inicia com `sleep infinity`; isso e intencional para manter o container vivo. Rode `npm run docker:dev` para iniciar a API.
 - Os testes devem ser executados dentro do Docker.
 - `npm test`, quando executado dentro do container, sobe a API temporariamente, espera `/health` responder e roda a suite Jest.
+- `npm run docker:db:reset` remove o volume local do PostgreSQL e recria o banco a partir de `docker/database/init.sql`.
 - O schema inicial do banco fica em `docker/database/init.sql`.
 - Instrucoes para agentes de IA ficam em `AGENTS.md`.

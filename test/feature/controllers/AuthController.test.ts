@@ -17,30 +17,38 @@ beforeEach(() => {
     connection = new PgPromiseAdapter(process.env.DATABASE_URL || "");
 });
 
-it("Should create a guest", async () => {
+it("Should sign up, sign in and logout a guest", async () => {
     const seed = Date.now();
     const body = {
         "name": `John Doe ${Math.random()}`,
         "email": `john${Math.random()}@example.com`,
         "document": createValidCpf(seed),
         "password": "password123"
-    }
+    };
 
     const responseSignUp = await httpClient.post(`${url}/auth/signup`, body);
     guestId = responseSignUp.guest.id;
-    token = responseSignUp.token;
-    const responseGetGuest = await httpClient.get(`${url}/guests/${guestId}`, {
+    expect(responseSignUp.token).toBeDefined();
+
+    const responseSignIn = await httpClient.post(`${url}/auth/signin`, {
+        email: body.email,
+        password: body.password
+    });
+    token = responseSignIn.token;
+    expect(token).toBeDefined();
+
+    const responseLogout = await httpClient.post(`${url}/auth/logout`, {}, {
         headers: {
             Authorization: `Bearer ${token}`
         }
     });
+    expect(responseLogout).toEqual({ success: true });
 
-    expect(responseGetGuest).toEqual({
-        id: guestId,
-        name: body.name,
-        email: body.email,
-        document: body.document
-    });
+    await expect(httpClient.get(`${url}/guests/${guestId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })).rejects.toThrow();
 });
 
 afterEach(async () => {
@@ -48,7 +56,7 @@ afterEach(async () => {
         await connection.query(`DELETE FROM hotel.reservations WHERE guest_id = $1`, [guestId]);
         await connection.query(`DELETE FROM hotel.sessions WHERE guest_id = $1`, [guestId]);
         await connection.query(`DELETE FROM hotel.guests WHERE guest_id = $1`, [guestId]);
-        connection.close();
         guestId = "";
     }
+    await connection.close();
 });

@@ -23,6 +23,13 @@ import SendEmailOnReservationCreated from './application/handlers/SendEmailOnRes
 import HealthCheck from './application/usecases/health/HealthCheck';
 import HealthController from './infra/http/controllers/HealthController';
 import PinoLogger from './infra/logging/PinoLogger';
+import HmacTokenService from './infra/auth/HmacTokenService';
+import SessionRepositoryDatabase from './infra/repositories/SessionRepositoryDatabase';
+import SignUp from './application/usecases/auth/SignUp';
+import SignIn from './application/usecases/auth/SignIn';
+import Logout from './application/usecases/auth/Logout';
+import Authenticate from './application/usecases/auth/Authenticate';
+import AuthController from './infra/http/controllers/AuthController';
 
 async function main() {
     const httpServer = new FastifyAdapter();
@@ -37,11 +44,13 @@ async function main() {
     Registry.getInstance().provide("DatabaseConnection", new PgPromiseAdapter(process.env.DATABASE_URL!));
     Registry.getInstance().provide("EventBus", eventBus);
     Registry.getInstance().provide("Logger", logger);
+    Registry.getInstance().provide("TokenService", new HmacTokenService(process.env.AUTH_SECRET || "dev-secret"));
 
     Registry.getInstance().provide("GuestRepository", new GuestRepositoryDatabase());
     Registry.getInstance().provide("RoomRepository", new RoomRepositoryDatabase());
     Registry.getInstance().provide("ReservationRepository", new ReservationRepositoryDatabase());
     Registry.getInstance().provide("ReservationQueryRepository", new ReservationQueryRepositoryDatabase());
+    Registry.getInstance().provide("SessionRepository", new SessionRepositoryDatabase());
 
     Registry.getInstance().provide("CreateGuest", new CreateGuest());
     Registry.getInstance().provide("GetGuest", new GetGuest());
@@ -52,7 +61,12 @@ async function main() {
     Registry.getInstance().provide("CancelReservation", new CancelReservation());
     Registry.getInstance().provide("GetReservationQueryHandler", new GetReservationQueryHandler());
     Registry.getInstance().provide("HealthCheck", new HealthCheck());
+    Registry.getInstance().provide("SignUp", new SignUp());
+    Registry.getInstance().provide("SignIn", new SignIn());
+    Registry.getInstance().provide("Authenticate", new Authenticate());
+    Registry.getInstance().provide("Logout", new Logout());
 
+    new AuthController();
     new GuestController();
     new RoomController();
     new ReservationController();

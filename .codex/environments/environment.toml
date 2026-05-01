@@ -24,3 +24,8 @@ command = "npm run docker:compose:up"
 name = "Stop Containers"
 icon = "tool"
 command = "npm run docker:compose:down"
+
+[[actions]]
+name = "Reset Database"
+icon = "tool"
+command = "npm run docker:db:reset"

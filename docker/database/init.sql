@@ -26,3 +26,11 @@ CREATE TABLE hotel.reservations (
     FOREIGN KEY (room_id) REFERENCES hotel.rooms(room_id),
     FOREIGN KEY (guest_id) REFERENCES hotel.guests(guest_id)
 );
+
+CREATE TABLE hotel.sessions (
+    token_hash TEXT PRIMARY KEY,
+    guest_id UUID NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    revoked_at TIMESTAMP NULL,
+    FOREIGN KEY (guest_id) REFERENCES hotel.guests(guest_id)
+);
