@@ -18,18 +18,16 @@ import GetGuest from './application/usecases/GetGuest';
 import GetRoom from './application/usecases/GetRoom';
 import GetReservationQueryHandler from './application/queries/GetReservationQueryHandler';
 import ReservationQueryRepositoryDatabase from './infra/repositories/queries/ReservationQueryRepositoryDatabase';
-import ExpressAdapter from './infra/http/server/ExpressAdapter';
-import FetchAdapter from './infra/http/client/FetchAdapter';
 import SendEmailOnReservationCreated from './application/handlers/SendEmailOnReservationCreated';
-import ConsoleLogger from './infra/logging/ConsoleLogger';
 import HealthCheck from './application/usecases/health/HealthCheck';
 import HealthController from './infra/http/controllers/HealthController';
+import PinoLogger from './infra/logging/PinoLogger';
 
 async function main() {
     const httpServer = new FastifyAdapter();
     const httpClient = new AxiosAdapter();
     const eventBus = new InMemoryEventBus();
-    const logger = new ConsoleLogger();
+    const logger = new PinoLogger();
 
     eventBus.subscribe("ReservationCreated", new SendEmailOnReservationCreated());
 
