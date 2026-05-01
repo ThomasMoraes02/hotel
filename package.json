@@ -4,6 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon --watch src --ext ts --exec ts-node src/main.ts",
+    "build": "tsc",
+    "start": "node dist/src/main.js",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "typecheck": "tsc --noEmit",
     "docker:compose:up": "docker compose up -d",
     "docker:compose:up:build": "docker compose up -d --build",
     "docker:compose:down": "docker compose down -v",
