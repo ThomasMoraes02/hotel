@@ -17,7 +17,7 @@ beforeEach(() => {
 
 it("Should create a room", async () => {
     const body = {
-        "number": 102,
+        "number": Date.now() % 1000000,
         "capacity": 4,
         "pricePerNight": 250.00,
         "status": "available"

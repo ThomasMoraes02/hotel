@@ -10,6 +10,7 @@ import GuestRepositoryDatabase from '../../../src/infra/repositories/GuestReposi
 import RoomRepositoryDatabase from '../../../src/infra/repositories/RoomRepositoryDatabase';
 import ReservationRepositoryDatabase from '../../../src/infra/repositories/ReservationRepositoryDatabase';
 import DatabaseConnection from '../../../src/infra/database/DatabaseConnection';
+import { createValidCpf } from '../../helpers/cpf';
 
 let guest: Guest;
 let room: Room;
@@ -17,6 +18,7 @@ let reservation: Reservation;
 let connection: DatabaseConnection;
 
 beforeEach(async () => {
+    const seed = Date.now();
     connection = new PgPromiseAdapter(process.env.DATABASE_URL || "");
     Registry.getInstance().provide("DatabaseConnection", connection);
     Registry.getInstance().provide("ReservationQueryRepository", new ReservationQueryRepositoryDatabase());
@@ -24,8 +26,8 @@ beforeEach(async () => {
     const RoomRepository = new RoomRepositoryDatabase();
     const ReservationRepository = new ReservationRepositoryDatabase();
 
-    guest = Guest.create("John Doe", `john${Math.random()}@gmail.com`, "529.682.010-00", "password123");
-    room = Room.create(1002, 2, 150.00, "available");
+    guest = Guest.create("John Doe", `john${Math.random()}@gmail.com`, createValidCpf(seed), "password123");
+    room = Room.create(seed % 1000000, 2, 150.00, "available");
     reservation = Reservation.create(room.getUuid(), guest.getUuid(), new Date("2024-05-01"), new Date("2024-05-05"));
 
     await GuestRepository.save(guest);

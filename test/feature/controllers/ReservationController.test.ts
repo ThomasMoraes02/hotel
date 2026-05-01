@@ -3,6 +3,7 @@ import PgPromiseAdapter from "../../../src/infra/database/PgPromiseAdapter";
 import AxiosAdapter from "../../../src/infra/http/client/AxiosAdapter";
 import HttpClient from "../../../src/infra/http/client/HttpClient";
 import DatabaseConnection from '../../../src/infra/database/DatabaseConnection';
+import { createValidCpf } from '../../helpers/cpf';
 
 let httpClient: HttpClient;
 let url: string;
@@ -18,16 +19,17 @@ beforeEach(() => {
 });
 
 it("Should create a reservation", async () => {
+    const seed = Date.now();
     const responseCreateGuest = await httpClient.post(`${url}/guests`, {
         "name": `John Doe ${Math.random()}`,
         "email": `john${Math.random()}@examples.com`,
-        "document": "866.354.540-12",
+        "document": createValidCpf(seed),
         "password": "password123"
     });
     guestId = responseCreateGuest.id;
 
     const responseCreateRoom = await httpClient.post(`${url}/rooms`, {
-        "number": 102,
+        "number": seed % 1000000,
         "capacity": 4,
         "pricePerNight": 250.00,
         "status": "available"

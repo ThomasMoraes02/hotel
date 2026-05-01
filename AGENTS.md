@@ -63,7 +63,8 @@ npm start
 Scripts disponiveis dentro do container:
 
 - `npm run dev`: roda a API em modo desenvolvimento.
-- `npm test`: roda os testes.
+- `npm test`: sobe a API temporariamente, espera `/health` responder e roda a suite Jest em serie.
+- `npm run test:jest`: roda Jest diretamente, sem subir a API; use apenas quando a API ja estiver rodando ou para investigar testes que nao dependem de HTTP.
 - `npm run test:watch`: roda os testes em modo watch.
 - `npm run typecheck`: checa TypeScript sem emitir arquivos.
 - `npm run build`: compila TypeScript para `dist`.

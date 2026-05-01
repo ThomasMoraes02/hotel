@@ -3,6 +3,7 @@ import PgPromiseAdapter from "../../../src/infra/database/PgPromiseAdapter";
 import AxiosAdapter from "../../../src/infra/http/client/AxiosAdapter";
 import HttpClient from "../../../src/infra/http/client/HttpClient";
 import DatabaseConnection from '../../../src/infra/database/DatabaseConnection';
+import { createValidCpf } from '../../helpers/cpf';
 
 let httpClient: HttpClient;
 let url: string;
@@ -16,10 +17,11 @@ beforeEach(() => {
 });
 
 it("Should create a guest", async () => {
+    const seed = Date.now();
     const body = {
         "name": `John Doe ${Math.random()}`,
         "email": `john${Math.random()}@example.com`,
-        "document": "810.028.210-29",
+        "document": createValidCpf(seed),
         "password": "password123"
     }
 
