@@ -6,16 +6,21 @@ name = "hotel"
 script = ""
 
 [[actions]]
-name = "Ambiente de Desenvolvimento"
+name = "Start Server"
 icon = "run"
 command = "npm run docker:dev"
 
 [[actions]]
-name = "Executar Testes"
+name = "Run Tests"
 icon = "test"
 command = "npm run docker:test"
 
 [[actions]]
-name = "Subir Containers"
+name = "Start Containers"
 icon = "tool"
 command = "npm run docker:compose:up"
+
+[[actions]]
+name = "Stop Containers"
+icon = "tool"
+command = "npm run docker:compose:down"
