@@ -13,7 +13,13 @@
     "docker:compose:up": "docker compose up -d",
     "docker:compose:up:build": "docker compose up -d --build",
     "docker:compose:down": "docker compose down -v",
-    "docker:compose:exec:backend": "docker compose exec backend bash"
+    "docker:compose:exec:backend": "docker compose exec backend bash",
+    "docker:dev": "docker compose exec backend npm run dev",
+    "docker:build": "docker compose exec backend npm run build",
+    "docker:start": "docker compose exec backend npm start",
+    "docker:test": "docker compose exec backend npm test",
+    "docker:test:watch": "docker compose exec backend npm run test:watch",
+    "docker:typecheck": "docker compose exec backend npm run typecheck"
   },
   "keywords": [],
   "author": "",

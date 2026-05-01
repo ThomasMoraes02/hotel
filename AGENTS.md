@@ -25,67 +25,60 @@ Ha tambem adaptadores alternativos no codigo, como `ExpressAdapter`, `AxiosAdapt
 
 ## Comandos uteis
 
-Instalar dependencias:
+Este projeto deve ser executado e validado dentro do Docker, porque a API, o banco PostgreSQL e as dependencias esperadas rodam no ambiente dos containers. Para agentes de IA: nao considere testes executados no host como validacao final deste repositorio.
 
-```bash
-npm install
-```
-
-Subir os containers:
+No host, use apenas comandos para orquestrar o Docker:
 
 ```bash
 npm run docker:compose:up
+npm run docker:compose:up:build
+npm run docker:compose:down
+npm run docker:compose:exec:backend
 ```
 
-Subir reconstruindo imagens:
+Depois que os containers estiverem de pe, rode validacoes pelo host usando os wrappers Docker:
 
 ```bash
-npm run docker:compose:up:build
+npm run docker:test
+npm run docker:typecheck
+npm run docker:build
 ```
 
-Entrar no container do backend:
+Ou entre no container do backend:
 
 ```bash
 npm run docker:compose:exec:backend
 ```
 
-Derrubar containers e volume do banco:
-
-```bash
-npm run docker:compose:down
-```
-
-Rodar testes:
+E rode os scripts dentro dele:
 
 ```bash
 npm test
-```
-
-Checar TypeScript sem emitir arquivos:
-
-```bash
 npm run typecheck
-```
-
-Rodar a API localmente:
-
-```bash
-npm run dev
-```
-
-Compilar TypeScript:
-
-```bash
 npm run build
-```
-
-Rodar a versao compilada:
-
-```bash
+npm run dev
 npm start
 ```
 
-Se adicionar ou alterar scripts de `dev`, `test`, `build`, `start` ou `typecheck`, mantenha esta documentacao atualizada.
+Scripts disponiveis dentro do container:
+
+- `npm run dev`: roda a API em modo desenvolvimento.
+- `npm test`: roda os testes.
+- `npm run test:watch`: roda os testes em modo watch.
+- `npm run typecheck`: checa TypeScript sem emitir arquivos.
+- `npm run build`: compila TypeScript para `dist`.
+- `npm start`: roda a versao compilada.
+
+Scripts wrapper para rodar do host dentro do container:
+
+- `npm run docker:dev`
+- `npm run docker:test`
+- `npm run docker:test:watch`
+- `npm run docker:typecheck`
+- `npm run docker:build`
+- `npm run docker:start`
+
+Se adicionar ou alterar scripts de `dev`, `test`, `build`, `start`, `typecheck` ou wrappers Docker, mantenha esta documentacao atualizada.
 
 ## Configuracao de ambiente
 
@@ -165,11 +158,11 @@ Use testes unitarios para comportamento puro de dominio e value objects. Use tes
 Antes de finalizar mudancas relevantes, rode pelo menos:
 
 ```bash
-npm test
-npm run typecheck
+npm run docker:test
+npm run docker:typecheck
 ```
 
-Se a mudanca envolver Docker, banco ou bootstrap da API, valide tambem com Docker Compose quando viavel.
+Se voce ja estiver dentro do container `backend`, rode os equivalentes `npm test` e `npm run typecheck`.
 
 ## Manutencao do AGENTS.md
 
